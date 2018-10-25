@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+    Articles
+
+    Sample SAM Template for Articles
+    
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+    Function:
+        Timeout: 1800
+
+
+Resources:
+
+    ArticlesFunction:
+        Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+        Properties:
+            CodeUri: articles/
+            Handler: app.lambdaHandler
+            Runtime: nodejs8.10
+            MemorySize: 128
+            Timeout: 15
+            Policies: AmazonDynamoDBFullAccess
+            Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+                Variables:
+                    TABLE_NAME:
+                        Ref: ArticlesTable
+    
+    ArticlesTable:
+        Type: AWS::Serverless::SimpleTable
+        Properties:
+            PrimaryKey:
+                Name: articleId
+                Type: String
+            

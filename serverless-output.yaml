@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Articles
+
+  Sample SAM Template for Articles
+
+  '
+Globals:
+  Function:
+    Timeout: 1800
+Resources:
+  ArticlesFunction:
+    Properties:
+      CodeUri: s3://articlesbucket12345/7b29e7c03caf63d590f8be906e728a2a
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: ArticlesTable
+      Handler: app.lambdaHandler
+      MemorySize: 128
+      Policies: AmazonDynamoDBFullAccess
+      Runtime: nodejs8.10
+      Timeout: 15
+    Type: AWS::Serverless::Function
+  ArticlesTable:
+    Properties:
+      PrimaryKey:
+        Name: articleId
+        Type: String
+    Type: AWS::Serverless::SimpleTable
+Transform: AWS::Serverless-2016-10-31
